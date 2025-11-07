@@ -17,7 +17,7 @@ A modern, SEO-optimized marketplace catalog application built with Next.js 14+ A
 
 - **Frontend**: Next.js 14+ with App Router, React Server Components, TypeScript, Tailwind CSS
 - **Backend**: Next.js Server Components with direct database access
-- **Database**: SQLite (development) / PostgreSQL (production) with Prisma ORM
+- **Database**: MongoDB with Prisma ORM (supports SQLite for local dev)
 - **Validation**: Zod for runtime type validation and schema enforcement
 - **State Management**: URL-based state with Next.js searchParams
 - **Deployment**: Vercel with GitHub Actions CI/CD
@@ -177,15 +177,17 @@ For production deployment, additional variables may be required. See [DEPLOYMENT
 
 ### Database Configuration
 
-**Development (SQLite):**
+**MongoDB (Recommended):**
+```env
+DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/marketplace?retryWrites=true&w=majority"
+```
+
+**SQLite (Local Development Only):**
 ```env
 DATABASE_URL="file:./dev.db"
 ```
 
-**Production (PostgreSQL):**
-```env
-DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
-```
+See [MONGODB_SETUP.md](./MONGODB_SETUP.md) for detailed MongoDB configuration instructions.
 
 ## 🎨 Key Features Explained
 
