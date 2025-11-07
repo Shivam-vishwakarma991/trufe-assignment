@@ -19,6 +19,10 @@ import {
   PaginationSkeleton
 } from '@/components/ui';
 
+// Force dynamic rendering for this page since it uses searchParams
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 /**
  * Generate SEO metadata for catalog pages
  */
