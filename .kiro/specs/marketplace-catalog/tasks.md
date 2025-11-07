@@ -120,14 +120,15 @@
     - Test Lighthouse performance and accessibility scores
     - _Requirements: 6.1, 6.2, 6.3, 7.5_
 
-- [ ] 16. Set up deployment configuration
+- [x] 16. Set up deployment configuration
   - Create production environment configuration
+  - Use github actions for the deployment.
   - Set up database migration scripts for deployment
   - Configure environment variables and secrets management
   - Add build optimization and static asset handling
   - _Requirements: 8.4, 7.1, 7.2_
 
-- [ ] 17. Create documentation and README
+- [x] 17. Create documentation and README
   - Write comprehensive README with setup instructions
   - Document API endpoints and data models
   - Add architecture decisions and technology choices explanation

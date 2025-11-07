@@ -9,7 +9,11 @@
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:migrate": "bash scripts/migrate.sh",
+    "build:production": "bash scripts/build.sh",
+    "postinstall": "prisma generate",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "next": "14.2.5",
