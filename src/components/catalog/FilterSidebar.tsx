@@ -59,46 +59,66 @@ export default function FilterSidebar({
   }, [isMobile, isOpen, onClose]);
 
   const updateFilter = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams);
-    
-    if (value && value.trim()) {
-      params.set(key, value.trim());
-    } else {
-      params.delete(key);
+    try {
+      const params = new URLSearchParams(searchParams.toString());
+      
+      // Sanitize the value
+      const sanitizedValue = value.trim().slice(0, 100);
+      
+      if (sanitizedValue) {
+        params.set(key, sanitizedValue);
+      } else {
+        params.delete(key);
+      }
+      
+      // Reset to first page when changing filters
+      params.delete('page');
+      
+      const queryString = params.toString();
+      const url = queryString ? `/catalog?${queryString}` : '/catalog';
+      
+      router.push(url);
+    } catch (error) {
+      console.error('FilterSidebar: Error updating filter:', error);
     }
-    
-    // Reset to first page when changing filters
-    params.delete('page');
-    
-    const queryString = params.toString();
-    const url = queryString ? `/catalog?${queryString}` : '/catalog';
-    router.push(url);
   };
 
   const updatePriceRange = () => {
-    const params = new URLSearchParams(searchParams);
-    
-    const minPrice = parseFloat(localMinPrice);
-    const maxPrice = parseFloat(localMaxPrice);
-    
-    if (!isNaN(minPrice) && minPrice > 0) {
-      params.set('min', minPrice.toString());
-    } else {
-      params.delete('min');
+    try {
+      const params = new URLSearchParams(searchParams.toString());
+      
+      const minPrice = parseFloat(localMinPrice);
+      const maxPrice = parseFloat(localMaxPrice);
+      
+      // Validate price range
+      if (!isNaN(minPrice) && minPrice >= 0 && minPrice <= 1000000) {
+        params.set('min', minPrice.toString());
+      } else {
+        params.delete('min');
+      }
+      
+      if (!isNaN(maxPrice) && maxPrice >= 0 && maxPrice <= 1000000) {
+        params.set('max', maxPrice.toString());
+      } else {
+        params.delete('max');
+      }
+      
+      // Validate that min <= max
+      if (!isNaN(minPrice) && !isNaN(maxPrice) && minPrice > maxPrice) {
+        console.warn('Minimum price cannot be greater than maximum price');
+        return;
+      }
+      
+      // Reset to first page when changing filters
+      params.delete('page');
+      
+      const queryString = params.toString();
+      const url = queryString ? `/catalog?${queryString}` : '/catalog';
+      
+      router.push(url);
+    } catch (error) {
+      console.error('FilterSidebar: Error updating price range:', error);
     }
-    
-    if (!isNaN(maxPrice) && maxPrice > 0) {
-      params.set('max', maxPrice.toString());
-    } else {
-      params.delete('max');
-    }
-    
-    // Reset to first page when changing filters
-    params.delete('page');
-    
-    const queryString = params.toString();
-    const url = queryString ? `/catalog?${queryString}` : '/catalog';
-    router.push(url);
   };
 
   const handlePriceSubmit = (e: React.FormEvent) => {
@@ -107,16 +127,21 @@ export default function FilterSidebar({
   };
 
   const clearPriceRange = () => {
-    setLocalMinPrice('');
-    setLocalMaxPrice('');
-    const params = new URLSearchParams(searchParams);
-    params.delete('min');
-    params.delete('max');
-    params.delete('page');
-    
-    const queryString = params.toString();
-    const url = queryString ? `/catalog?${queryString}` : '/catalog';
-    router.push(url);
+    try {
+      setLocalMinPrice('');
+      setLocalMaxPrice('');
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('min');
+      params.delete('max');
+      params.delete('page');
+      
+      const queryString = params.toString();
+      const url = queryString ? `/catalog?${queryString}` : '/catalog';
+      
+      router.push(url);
+    } catch (error) {
+      console.error('FilterSidebar: Error clearing price range:', error);
+    }
   };
 
   // Mobile drawer overlay

@@ -127,7 +127,7 @@ export class SearchService {
       // Transform raw products to match our Product type
       return rawProducts.map(product => ({
         ...product,
-        images: JSON?.parse(product?.images) // Parse JSON string to array
+        images: product.images // Keep as string, will be parsed in components
       }));
     } catch (error) {
       throw new DatabaseError(`Failed to execute product search: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -301,7 +301,7 @@ export class SearchService {
 
       return {
         ...product,
-        images: JSON?.parse(product?.images)
+        images: product.images // Keep as string, will be parsed in components
       };
     } catch (error) {
       throw new DatabaseError(`Failed to get product by ID: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -323,7 +323,7 @@ export class SearchService {
 
       return {
         ...product,
-        images: JSON?.parse(product?.images)
+        images: product.images // Keep as string, will be parsed in components
       };
     } catch (error) {
       throw new DatabaseError(`Failed to get product by slug: ${error instanceof Error ? error.message : 'Unknown error'}`);

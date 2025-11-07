@@ -39,7 +39,7 @@ export default function ProductGrid({ products, totalCount, currentPage, pageSiz
           <div className="aspect-square relative overflow-hidden bg-gray-100">
             {(() => {
               try {
-                const images = JSON?.parse(product?.images) as string[];
+                const images = product.images ? JSON.parse(product.images) : [];
                 return images && images.length > 0 ? (
                   <Image
                     src={images[0]}
@@ -49,7 +49,8 @@ export default function ProductGrid({ products, totalCount, currentPage, pageSiz
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                   />
                 ) : null;
-              } catch {
+              } catch (error) {
+                console.warn('Failed to parse product images:', error);
                 return null;
               }
             })() || (

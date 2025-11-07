@@ -316,8 +316,8 @@ export default async function Home() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/catalog?category=Home%20%26%20Garden" className="hover:text-white transition-colors">
-                    Home & Garden
+                  <Link href="/catalog?category=Sports%20%26%20Outdoors" className="hover:text-white transition-colors">
+                    Sports & Outdoors
                   </Link>
                 </li>
               </ul>
@@ -349,11 +349,11 @@ function getCategoryIcon(categoryName: string): string {
     'Electronics': '📱',
     'Clothing': '👕',
     'Home & Garden': '🏠',
-    'Sports': '⚽',
+    'Sports & Outdoors': '⚽',
     'Books': '📚',
-    'Toys': '🧸',
+    'Toys & Games': '🧸',
     'Automotive': '🚗',
-    'Health': '💊',
+    'Health & Beauty': '💊',
     'Beauty': '💄',
     'Food': '🍎',
     'Music': '🎵',

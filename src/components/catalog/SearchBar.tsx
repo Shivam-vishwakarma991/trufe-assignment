@@ -14,27 +14,38 @@ export default function SearchBar({ query, placeholder = "Search products..." }:
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = useCallback((newQuery: string) => {
-    setIsSearching(true);
-    
-    const params = new URLSearchParams(searchParams);
-    
-    if (newQuery.trim()) {
-      params.set('q', newQuery.trim());
-    } else {
-      params.delete('q');
+    if (isSearching) {
+      return; // Prevent multiple simultaneous searches
     }
     
-    // Reset to first page when searching
-    params.delete('page');
+    setIsSearching(true);
     
-    const queryString = params.toString();
-    const url = queryString ? `/catalog?${queryString}` : '/catalog';
-    
-    router.push(url);
-    
-    // Reset searching state after a short delay
-    setTimeout(() => setIsSearching(false), 300);
-  }, [router, searchParams]);
+    try {
+      const params = new URLSearchParams(searchParams.toString());
+      
+      // Sanitize the query
+      const sanitizedQuery = newQuery.trim().slice(0, 200);
+      
+      if (sanitizedQuery) {
+        params.set('q', sanitizedQuery);
+      } else {
+        params.delete('q');
+      }
+      
+      // Reset to first page when searching
+      params.delete('page');
+      
+      const queryString = params.toString();
+      const url = queryString ? `/catalog?${queryString}` : '/catalog';
+      
+      router.push(url);
+    } catch (error) {
+      console.error('SearchBar: Error during search:', error);
+    } finally {
+      // Reset searching state after a short delay
+      setTimeout(() => setIsSearching(false), 500);
+    }
+  }, [router, searchParams, isSearching]);
 
   // Debounce search input with improved logic
   useEffect(() => {
@@ -44,8 +55,12 @@ export default function SearchBar({ query, placeholder = "Search products..." }:
     }
 
     const timeoutId = setTimeout(() => {
-      handleSearch(searchQuery);
-    }, 300); // Reduced debounce time for better UX
+      try {
+        handleSearch(searchQuery);
+      } catch (error) {
+        console.error('Search debounce error:', error);
+      }
+    }, 500); // Increased debounce time to reduce rapid calls
 
     return () => clearTimeout(timeoutId);
   }, [searchQuery, query, handleSearch]);
