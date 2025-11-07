@@ -12,16 +12,9 @@ interface ProductDetailPageProps {
   }
 }
 
-// Generate static params for SSG
-export async function generateStaticParams() {
-  const products = await prisma.product.findMany({
-    select: { id: true }
-  })
-
-  return products.map((product) => ({
-    id: product.id,
-  }))
-}
+// Use dynamic rendering instead of SSG for fresh product data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
